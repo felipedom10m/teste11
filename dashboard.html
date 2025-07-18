@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>teste11 - Área do Aluno</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #141414;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .member-dashboard {
+            min-height: 100vh;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .course-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-name {
+            color: #cccccc;
+            font-size: 14px;
+        }
+        
+        .logout-btn {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #b8070f;
+        }
+        
+        .dashboard-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 300px));
+            gap: 24px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+        
+        /* Responsividade para diferentes telas */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 280px));
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+        
+        .module-card {
+            background: #1f1f1f;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+            border-color: #333;
+        }
+        
+        .module-cover {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .module-icon {
+            font-size: 48px;
+            opacity: 0.9;
+            transition: transform 0.3s ease;
+        }
+        
+        .module-card:hover .module-icon {
+            transform: scale(1.1);
+        }
+        
+        .module-info {
+            padding: 20px;
+        }
+        
+        .module-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .module-stats {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background: #333;
+            color: #ccc;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .support-section {
+            background: #1f1f1f;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        
+        .support-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+        
+        .support-text {
+            color: #cccccc;
+            margin-bottom: 20px;
+        }
+        
+        .support-contacts {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .support-contact {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #cccccc;
+            font-size: 14px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+        
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #999;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            .course-title {
+                font-size: 24px;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .dashboard-content {
+                padding: 30px 15px;
+            }
+            
+            .support-contacts {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="member-dashboard">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1 class="course-title">🎓 teste11</h1>
+                <div class="user-info">
+                    <span class="user-name">👤 Aluno</span>
+                    <button class="logout-btn" onclick="logout()">🚪 Sair</button>
+                </div>
+            </div>
+        </header>
+        
+        <main class="dashboard-content">
+            <h2 class="section-title">📚 Conteúdo do Curso</h2>
+            
+            <div class="content-grid">
+                
+    <div class="module-card" onclick="openModule('MentalidaGuerreiro111')">
+      <div class="module-cover" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+        <div class="module-icon">📖</div>
+      </div>
+      <div class="module-info">
+        <h3 class="module-title">MentalidaGuerreiro111</h3>
+        <div class="module-stats">
+          <span class="stat">🎥 2</span>
+          
+        </div>
+      </div>
+    </div>
+                
+            </div>
+            
+            
+            
+            <div class="support-section">
+                <h3 class="support-title">💬 Suporte</h3>
+                <p class="support-text">Precisa de ajuda? Entre em contato conosco:</p>
+                <div class="support-contacts">
+                    <div class="support-contact">
+                        <span>📧</span>
+                        <span>suporte@seusite.com</span>
+                    </div>
+                    <div class="support-contact">
+                        <span>📱</span>
+                        <span>WhatsApp: (11) 99999-9999</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('memberAuth')) {
+            window.location.href = 'index.html';
+        }
+        
+        // Dados dos módulos para navegação
+        const moduleData = {"MentalidaGuerreiro111":[{"name":"emag.mp4","path":"MentalidaGuerreiro111/emag.mp4","type":"video"},{"name":"emagrecim1.mp4","path":"MentalidaGuerreiro111/emagrecim1.mp4","type":"video"}]};
+        const extraData = [];
+        
+        function openModule(moduleName) {
+            const files = moduleData[moduleName];
+            if (!files || files.length === 0) return;
+            
+            // Criar página de módulo dinamicamente
+            const moduleHTML = generateModulePage(moduleName, files);
+            document.body.innerHTML = moduleHTML;
+        }
+        
+        function openFile(filePath) {
+            // Abrir arquivo diretamente
+            const fileUrl = 'arquivos/' + filePath;
+            window.open(fileUrl, '_blank');
+        }
+        
+        function generateModulePage(moduleName, files) {
+            const moduleTitle = moduleName.replace(/[-_]/g, ' ').replace(/w/g, l => l.toUpperCase());
+            
+            const filesList = files.map(file => `
+                <div class="file-item" onclick="openFile('${file.path}')">
+                    <div class="file-icon">${file.type === 'video' ? '🎥' : '📄'}</div>
+                    <div class="file-info">
+                        <h4 class="file-name">${file.name}</h4>
+                        <p class="file-type">${file.type === 'video' ? 'Vídeo' : 'Documento'}</p>
+                    </div>
+                    <div class="file-action">
+                        <button class="download-btn">📥 Abrir</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            return `
+                <div class="member-dashboard">
+                    <header class="dashboard-header">
+                        <div class="header-content">
+                            <h1 class="course-title">📖 ${moduleTitle}</h1>
+                            <div class="user-info">
+                                <button class="logout-btn" onclick="goBack()">← Voltar</button>
+                            </div>
+                        </div>
+                    </header>
+                    
+                    <main class="dashboard-content">
+                        <h2 class="section-title">🎥 Arquivos deste módulo</h2>
+                        
+                        <div class="files-list">
+                            ${filesList}
+                        </div>
+                        
+                        <div class="support-section">
+                            <h3 class="support-title">💬 Suporte</h3>
+                            <p class="support-text">Precisa de ajuda? Entre em contato conosco:</p>
+                            <div class="support-contacts">
+                                <div class="support-contact">
+                                    <span>📧</span>
+                                    <span>suporte@seusite.com</span>
+                                </div>
+                                <div class="support-contact">
+                                    <span>📱</span>
+                                    <span>WhatsApp: (11) 99999-9999</span>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+                
+                <style>
+                    .files-list {
+                        background: #1f1f1f;
+                        border-radius: 12px;
+                        padding: 20px;
+                        margin-bottom: 30px;
+                    }
+                    
+                    .file-item {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                        padding: 16px;
+                        background: #2a2a2a;
+                        border-radius: 8px;
+                        margin-bottom: 12px;
+                        cursor: pointer;
+                        transition: background 0.3s;
+                    }
+                    
+                    .file-item:hover {
+                        background: #333;
+                    }
+                    
+                    .file-icon {
+                        font-size: 24px;
+                        width: 40px;
+                        text-align: center;
+                    }
+                    
+                    .file-info {
+                        flex: 1;
+                    }
+                    
+                    .file-name {
+                        font-size: 16px;
+                        font-weight: 500;
+                        color: #ffffff;
+                        margin-bottom: 4px;
+                    }
+                    
+                    .file-type {
+                        font-size: 14px;
+                        color: #ccc;
+                    }
+                    
+                    .download-btn {
+                        background: #007bff;
+                        color: white;
+                        border: none;
+                        padding: 8px 16px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 14px;
+                        transition: background 0.3s;
+                    }
+                    
+                    .download-btn:hover {
+                        background: #0056b3;
+                    }
+                </style>
+            `;
+        }
+        
+        function goBack() {
+            window.location.reload();
+        }
+        
+        function logout() {
+            localStorage.removeItem('memberAuth');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
